@@ -151,10 +151,7 @@ def data_cleaning(df_input):
     # Drop unwanted columns
     df.drop(['PassengerId','Name','Ticket','Cabin'], axis=1, inplace=True)
     print(df.head(10))
-    
-    # Cast Pclass to string for OHE
-    df['Pclass'] = df['Pclass'].astype(str)
-    
+       
     # Drop rows with Nulls using df.dropna(), will drop over 20% data
     # Embarked has 2 nulls, OK to drop rows with a low number of Nulls
     df = df[df['Embarked'].notnull()]
@@ -225,7 +222,7 @@ def feature_engineering(x_train_input,x_test_input):
     x_test=MEDIAN_IMPUTER.transform(x_test)
     
     # OHE for Categorical Vars
-    OHCE=ce.OneHotCategoricalEncoder(variables=['Sex','Embarked','Pclass'], 
+    OHCE=ce.OneHotCategoricalEncoder(variables=['Sex','Embarked'], 
                                                   drop_last=True)
     # fit,transform x_train     
     OHCE.fit(x_train)
@@ -318,7 +315,7 @@ def feature_scaling(x_train_input,x_test_input):
     x_test  = x_test_input.copy(deep=True)
 
     SCALER = SklearnTransformerWrapper(transformer = MinMaxScaler(),
-                                 variables = [ 'Age', 'SibSp', 'Parch','Fare'])
+                                 variables = ['Pclass','Age', 'SibSp', 'Parch','Fare'])
     # fit,transform x_train
     SCALER.fit(x_train)
     x_train = SCALER.transform(x_train)
